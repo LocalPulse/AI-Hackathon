@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Database files
+data/database/activity.db
+data/database/users.db
+
+# Model weights (large binary files)
+models/*
+!models/.gitkeep
+*.pt

@@ -1,0 +1,46 @@
+# Detection Model Configuration
+detection:
+  model: "yolo11x"  # Detection model name (yolo11m, yolo11x, etc.)
+  image_size: 640   # Input image size for detection
+  device: null      # Device: "cuda", "cpu", or null for auto-detect
+
+# Confidence Thresholds
+confidence:
+  threshold: 0.25   # General detection confidence threshold
+  person: 0.35      # Minimum confidence for person detection
+  vehicle: 0.65     # Minimum confidence for vehicle detection
+
+# NMS (Non-Maximum Suppression) Configuration
+nms:
+  iou_threshold: 0.45  # IoU threshold for NMS
+
+# Tracker Configuration
+tracker:
+  iou_threshold: 0.2   # Minimum IoU for track matching
+  max_lost: 45         # Maximum frames to keep lost tracks
+  use_prediction: true # Use velocity prediction for lost tracks
+
+# Activity Classification Configuration
+activity:
+  window: 15                    # Number of frames to analyze for activity
+  person:
+    speed_threshold: 15.0       # Pixels per second threshold for person movement
+  vehicle:
+    displacement_threshold: 8.0 # Minimum displacement for vehicle movement
+    min_history: 5              # Minimum history length for vehicle classification
+
+# Clothing Detection Configuration
+clothing:
+  enabled: true
+  high_vis:
+    h_min: 5      # HSV Hue minimum (yellow/orange range)
+    h_max: 35     # HSV Hue maximum
+    s_min: 100    # HSV Saturation minimum
+    v_min: 100    # HSV Value minimum
+    coverage: 0.03  # Minimum coverage ratio for high-vis detection
+
+# Video Processing Configuration
+video:
+  default_fps: 25.0  # Default FPS if not detected from video
+  resize: [640, 480] # Default resize dimensions [width, height]
+

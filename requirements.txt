@@ -1,0 +1,10 @@
+# AI-Hackathon Dependencies
+# PyTorch must be installed separately with CUDA support!
+# See: scripts/setup_windows.ps1
+
+# Core
+ultralytics>=8.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+pyyaml>=6.0
+

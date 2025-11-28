@@ -1,0 +1,19 @@
+# Usage: docker-compose up --build
+
+version: "3.8"
+
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        TARGET: cpu
+        PYTHON_VERSION: "3.12"
+    image: ai-hackathon:cpu
+    volumes:
+      - ../data:/app/data:ro
+      - ../output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["--source", "/app/data/raw/video.mp4", "--output", "/app/output/result.mp4"]

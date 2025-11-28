@@ -1,0 +1,32 @@
+# Python related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Poetry
+poetry.lock
+
+# Docker
+Dockerfile*
+
+# Git
+.git/
+
+# Data / storage
+data/
+models/
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.log
+dist/
+build/
+
