@@ -1,8 +1,18 @@
 import sqlite3
+import os
 from datetime import datetime
+from pathlib import Path
 
-USERS_DB = "users.db"
-ACTIVITY_DB = "activity.db"
+# Get the project root directory (2 levels up from this file)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+DATABASE_DIR = PROJECT_ROOT / "data" / "database"
+
+# Ensure the database directory exists
+DATABASE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Database file paths
+USERS_DB = str(DATABASE_DIR / "users.db")
+ACTIVITY_DB = str(DATABASE_DIR / "activity.db")
 
 def create_connection(db_file):
     """Creates a database connection to the SQLite database specified by db_file."""
