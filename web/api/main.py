@@ -1,14 +1,17 @@
 import sys
+from pathlib import Path
+
+# Add project root to path before importing project modules
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
-from pathlib import Path
 
-from api.utils.database import get_logs, get_log_count
-from api.utils.shared_state import get_shared_state
+from web.api.utils.database import get_logs, get_log_count
+from web.api.utils.shared_state import get_shared_state
 
 app = FastAPI(
     title="YOLO Detection Monitoring API",
@@ -25,8 +28,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 # Pydantic models
 class Detection(BaseModel):
     """Detection log entry."""
@@ -37,9 +38,7 @@ class Detection(BaseModel):
     confidence: float
     timestamp: str
     
-    class Config:
-        # Allow field alias for 'class' -> 'class_name'
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class DetectionResponse(BaseModel):

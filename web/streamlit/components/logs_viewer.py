@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
+import time
 from web.streamlit.services.data_service import get_data_service
-from web.streamlit.services.camera_manager import get_camera_manager
 from web.streamlit.config.i18n import get_translation
 from web.streamlit.config.settings import get_language
 from web.streamlit.utils.icons import icon_text
@@ -10,51 +10,59 @@ from typing import Optional
 def render_logs_viewer():
     lang = get_language()
     data_service = get_data_service()
-    camera_manager = get_camera_manager()
     
     st.header(icon_text("logs", get_translation("logs", lang)))
     
-    cameras = camera_manager.get_all_cameras()
-    camera_options = [get_translation("all_cameras", lang)] + [cam.name for cam in cameras]
+    # Auto-refresh toggle
+    col_refresh1, col_refresh2 = st.columns([1, 3])
+    with col_refresh1:
+        auto_refresh = st.checkbox("🔄 Auto-refresh", value=True, key="auto_refresh_logs")
+    with col_refresh2:
+        if auto_refresh:
+            st.caption("Updates every 2 seconds")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
-        selected_camera = st.selectbox(
-            icon_text("camera", get_translation("camera", lang)),
-            camera_options,
-            key="logs_camera_selector"
-        )
-    
-    with col2:
         class_filter = st.selectbox(
             get_translation("filter_by_class", lang),
             [None, "person", "train"],
             key="logs_class_filter"
         )
     
-    with col3:
+    with col2:
         activity_filter = st.selectbox(
             get_translation("filter_by_activity", lang),
             [None, "standing", "moving", "stopped"],
             key="logs_activity_filter"
         )
     
-    camera_id = None
-    if selected_camera != get_translation("all_cameras", lang):
-        selected_cam = next((cam for cam in cameras if cam.name == selected_camera), None)
-        if selected_cam:
-            camera_id = selected_cam.camera_id
-    
     page_size = st.slider("Items per page", 10, 100, 50, key="logs_page_size")
     
     if "log_page" not in st.session_state:
         st.session_state.log_page = 0
     
+    # Create placeholder for dynamic content
+    placeholder = st.empty()
+    
+    # Auto-refresh loop
+    while auto_refresh:
+        with placeholder.container():
+            _render_logs_content(data_service, lang, class_filter, activity_filter, page_size)
+        
+        time.sleep(2)  # Refresh every 2 seconds
+        st.rerun()
+    
+    # If auto-refresh is off, render once
+    with placeholder.container():
+        _render_logs_content(data_service, lang, class_filter, activity_filter, page_size)
+
+
+def _render_logs_content(data_service, lang, class_filter, activity_filter, page_size):
+    """Render the logs content (separated for reusability)."""
     total_count = data_service.get_log_count(
         class_filter=class_filter,
-        activity_filter=activity_filter,
-        camera_id=camera_id
+        activity_filter=activity_filter
     )
     
     total_pages = (total_count + page_size - 1) // page_size if total_count > 0 else 1
@@ -82,8 +90,7 @@ def render_logs_viewer():
         limit=page_size,
         offset=offset,
         class_filter=class_filter,
-        activity_filter=activity_filter,
-        camera_id=camera_id
+        activity_filter=activity_filter
     )
     
     if not logs:
@@ -92,15 +99,8 @@ def render_logs_viewer():
     
     df_data = []
     for log in logs:
-        camera_name = "N/A"
-        if log.camera_id:
-            cam = camera_manager.get_camera(log.camera_id)
-            if cam:
-                camera_name = cam.name
-        
         df_data.append({
             get_translation("timestamp", lang): log.timestamp,
-            get_translation("camera", lang): camera_name,
             get_translation("track_id", lang): log.track_id,
             get_translation("class", lang): log.class_name,
             get_translation("activity", lang): log.activity,
@@ -108,5 +108,5 @@ def render_logs_viewer():
         })
     
     df = pd.DataFrame(df_data)
-    st.dataframe(df, width='stretch', hide_index=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
 
