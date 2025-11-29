@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  neural-network:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    container_name: ai-hackathon-neural
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - ai-hackathon-network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: web/api/Dockerfile
+    container_name: ai-hackathon-api
+    volumes:
+      - ./data:/app/data
+      - ./web/api:/app/web/api
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - neural-network
+    networks:
+      - ai-hackathon-network
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: web/streamlit/Dockerfile
+    container_name: ai-hackathon-streamlit
+    volumes:
+      - ./data:/app/data
+      - ./web/streamlit:/app/web/streamlit
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    networks:
+      - ai-hackathon-network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: ai-hackathon-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./web/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - streamlit
+    networks:
+      - ai-hackathon-network
+    restart: unless-stopped
+
+networks:
+  ai-hackathon-network:
+    driver: bridge
+

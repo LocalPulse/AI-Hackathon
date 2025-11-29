@@ -1,32 +1,25 @@
-# Python related
-__pycache__/
+__pycache__
 *.pyc
 *.pyo
 *.pyd
 .Python
-env/
+*.so
+*.egg
+*.egg-info
+dist
+build
+.git
+.gitignore
+.env
+.venv
 venv/
-.venv/
-
-# Poetry
-poetry.lock
-
-# Docker
-Dockerfile*
-
-# Git
-.git/
-
-# Data / storage
-data/
-# models/ - commented out, models are needed in container
-
-# IDE
-.vscode/
-.idea/
-
-# Misc
+*.db
+*.sqlite
+.DS_Store
+.vscode
+.idea
 *.log
-dist/
-build/
-
+output/*
+!output/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
