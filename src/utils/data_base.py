@@ -1,5 +1,3 @@
-"""Alias module for database logging functions."""
-
 try:
     from web.api.utils.database import log_activity
 except ImportError:

@@ -221,3 +221,6 @@ models/*
 ._*
 .Spotlight-V100
 .Trashes
+package-lock.json
+output/result.mp4
+/data/database

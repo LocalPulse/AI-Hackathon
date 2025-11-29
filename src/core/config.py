@@ -4,6 +4,11 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
+try:
+    import yaml
+except ImportError:
+    yaml = None  # type: ignore
+
 logger = logging.getLogger(__name__)
 
 # Default configuration values
@@ -67,16 +72,17 @@ def load_config(config_path: Optional[Union[str, Path]] = None) -> Dict[str, Any
         logger.warning(f"Config file not found at {config_path}, using defaults")
         return config
     
+    if yaml is None:
+        logger.warning("PyYAML not installed. Install with: pip install pyyaml")
+        return config
+    
     try:
-        import yaml
         with open(config_path, "r", encoding="utf-8") as f:
             file_config = yaml.safe_load(f) or {}
         
         # Deep merge with defaults
         config = _deep_merge(config, file_config)
         logger.info(f"Loaded configuration from {config_path}")
-    except ImportError:
-        logger.warning("PyYAML not installed. Install with: pip install pyyaml")
     except Exception as e:
         logger.warning(f"Failed to load config from {config_path}: {e}, using defaults")
     

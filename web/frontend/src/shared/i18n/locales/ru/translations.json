@@ -1,0 +1,75 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "retry": "Повторить",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "close": "Закрыть",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "clear": "Очистить",
+    "of": "из",
+    "previous": "Назад",
+    "next": "Вперед"
+  },
+  "nav": {
+    "cameras": "Камеры",
+    "metrics": "Метрики",
+    "logs": "Логи",
+    "settings": "Настройки"
+  },
+  "cameras": {
+    "title": "Камеры",
+    "active": "Активна",
+    "inactive": "Неактивна",
+    "error": "Ошибка",
+    "people": "Люди",
+    "trains": "Поезда",
+    "total": "Всего",
+    "lastUpdate": "Последнее обновление",
+    "noCameras": "Нет доступных камер"
+  },
+  "metrics": {
+    "title": "Метрики AI",
+    "totalDetections": "Всего детекций",
+    "averageConfidence": "Средний уровень уверенности",
+    "activityDistribution": "Распределение активности",
+    "detectionTimeline": "Временная линия детекций",
+    "topCameras": "Топ камер",
+    "classStatistics": "Статистика по классам",
+    "standing": "Стоит",
+    "moving": "Движется",
+    "stopped": "Остановлен",
+    "person": "Человек",
+    "train": "Поезд"
+  },
+  "logs": {
+    "title": "Логи детекций",
+    "id": "ID",
+    "trackId": "ID трека",
+    "class": "Класс",
+    "activity": "Активность",
+    "confidence": "Уверенность",
+    "timestamp": "Время",
+    "camera": "Камера",
+    "noLogs": "Нет доступных логов",
+    "filters": {
+      "class": "Фильтр по классу",
+      "activity": "Фильтр по активности",
+      "camera": "Фильтр по камере"
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Темная",
+    "english": "Английский",
+    "russian": "Русский"
+  }
+}
+

@@ -10,6 +10,7 @@ def main():
     
     parser = argparse.ArgumentParser(description="Video detection and tracking")
     parser.add_argument("--source", "-s", default=0, help="Video source")
+    parser.add_argument("--camera-id", type=str, help="Camera identifier (for multi-camera setup)")
     parser.add_argument("--output", "-o", help="Output video path")
     parser.add_argument("--device", "-d", help="Device: cuda or cpu")
     parser.add_argument("--det-model", default=None, help="Detection model (default: from config.yaml)")
@@ -39,7 +40,9 @@ def main():
     )
     
     resize = tuple(args.resize) if args.resize else None
-    Pipeline(config).run(
+    camera_id = args.camera_id or None
+    
+    Pipeline(config, camera_id=camera_id).run(
         max_frames=args.max_frames,
         resize=resize,
         show=args.show

@@ -1,0 +1,25 @@
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(249 250 251);
+}
+
+.dark .layout-container {
+  background-color: rgb(17 24 39);
+}
+
+.layout-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.layout-main {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 64px);
+}
+

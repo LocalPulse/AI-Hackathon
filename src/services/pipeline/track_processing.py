@@ -1,19 +1,26 @@
 import logging
+import time
 from typing import List, Optional
 
 from src.services.tracker import Track
 from src.services.activity import ActivityClassifier
 from src.services.pipeline.utils import get_class_name
 from src.utils.data_base import log_activity
-from src.utils.shared_state import get_shared_state
+from src.utils.constants import PERIODIC_LOG_INTERVAL, DEFAULT_CAMERA_ID
+from src.utils.state_sync import save_camera_tracks
 
 logger = logging.getLogger(__name__)
 
+# Constants
+VALID_CLASSES = frozenset(['person', 'train'])
+
 
 class TrackProcessor:
-    def __init__(self, det_model, classifier: Optional[ActivityClassifier]):
+    def __init__(self, det_model, classifier: Optional[ActivityClassifier], camera_id: Optional[str] = None):
         self._det_model = det_model
         self._classifier = classifier
+        self._camera_id = camera_id or DEFAULT_CAMERA_ID
+        self._last_periodic_log_time = 0.0
     
     def process(self, tracks: List[Track]):
         """Process tracks: classify, log and update shared state."""
@@ -27,39 +34,66 @@ class TrackProcessor:
         for track in tracks:
             track.cls_name = get_class_name(names, track.cls)
         
-        if self._classifier:
-            self._classifier.update_tracks(tracks)
+        if not self._classifier:
+            return
+        self._classifier.update_tracks(tracks)
     
     def _log_activity_changes(self, tracks: List[Track]):
-        """Log activities to database when activity changes."""
+        """Log activities to database when activity changes or periodically."""
         if log_activity is None:
             return
         
+        current_time = time.time()
+        should_periodic_log = self._should_periodic_log(current_time)
+        
         for track in tracks:
-            if not self._should_log_track(track):
+            if self._should_log_track_change(track):
+                self._log_track_activity(track)
                 continue
             
-            self._log_track_activity(track)
+            if should_periodic_log and self._should_periodic_log_track(track):
+                self._log_track_activity(track, force=True)
+        
+        if should_periodic_log:
+            self._last_periodic_log_time = current_time
     
-    def _should_log_track(self, track: Track) -> bool:
-        """Check if track should be logged."""
-        if track.cls_name not in ['person', 'train']:
-            return False
-        
-        if not track.activity:
-            return False
-        
-        if track.activity == track.previous_activity:
-            return False
-        
-        return True
+    def _should_periodic_log(self, current_time: float) -> bool:
+        """Check if periodic logging should occur."""
+        return (current_time - self._last_periodic_log_time) >= PERIODIC_LOG_INTERVAL
     
-    def _log_track_activity(self, track: Track):
+    def _is_valid_track_class(self, track: Track) -> bool:
+        """Check if track class is valid for logging."""
+        return track.cls_name in VALID_CLASSES
+    
+    def _has_activity(self, track: Track) -> bool:
+        """Check if track has activity."""
+        return bool(track.activity)
+    
+    def _should_log_track_change(self, track: Track) -> bool:
+        """Check if track should be logged due to activity change."""
+        if not self._is_valid_track_class(track):
+            return False
+        
+        if not self._has_activity(track):
+            return False
+        
+        if track.previous_activity is None:
+            return True
+        
+        return track.activity != track.previous_activity
+    
+    def _should_periodic_log_track(self, track: Track) -> bool:
+        """Check if track should be logged periodically."""
+        if not self._is_valid_track_class(track):
+            return False
+        return self._has_activity(track)
+    
+    def _log_track_activity(self, track: Track, force: bool = False):
         """Log track activity to database."""
         if log_activity is None:
             return
         
-        if track.cls_name is None or track.activity is None:
+        if not track.cls_name or not track.activity:
             return
         
         try:
@@ -67,23 +101,22 @@ class TrackProcessor:
                 track_id=track.id,
                 class_name=track.cls_name,
                 activity=track.activity,
-                confidence=track.activity_conf
+                confidence=track.activity_conf,
+                camera_id=self._camera_id
             )
-            track.previous_activity = track.activity
+            if not force:
+                track.previous_activity = track.activity
         except Exception as e:
             logger.warning(f"Failed to log activity: {e}")
     
     def _update_shared_state(self, tracks: List[Track]):
-        """Update shared state with current active tracks."""
-        if get_shared_state is None:
-            return
+        """Update sync file with current active tracks."""
+        track_data = self._prepare_track_data(tracks)
         
         try:
-            shared_state = get_shared_state()
-            track_data = self._prepare_track_data(tracks)
-            shared_state.update_tracks(track_data)
+            save_camera_tracks(self._camera_id, track_data, time.time())
         except Exception as e:
-            logger.warning(f"Failed to update shared state: {e}")
+            logger.warning(f"Failed to save camera tracks: {e}")
     
     def _prepare_track_data(self, tracks: List[Track]) -> List[dict]:
         """Prepare track data for shared state."""
@@ -95,6 +128,6 @@ class TrackProcessor:
                 'confidence': track.activity_conf
             }
             for track in tracks
-            if track.cls_name in ['person', 'train']
+            if self._is_valid_track_class(track)
         ]
 

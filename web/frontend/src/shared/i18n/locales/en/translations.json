@@ -1,0 +1,75 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "nav": {
+    "cameras": "Cameras",
+    "metrics": "Metrics",
+    "logs": "Logs",
+    "settings": "Settings"
+  },
+  "cameras": {
+    "title": "Cameras",
+    "active": "Active",
+    "inactive": "Inactive",
+    "error": "Error",
+    "people": "People",
+    "trains": "Trains",
+    "total": "Total",
+    "lastUpdate": "Last Update",
+    "noCameras": "No cameras available"
+  },
+  "metrics": {
+    "title": "AI Metrics",
+    "totalDetections": "Total Detections",
+    "averageConfidence": "Average Confidence",
+    "activityDistribution": "Activity Distribution",
+    "detectionTimeline": "Detection Timeline",
+    "topCameras": "Top Cameras",
+    "classStatistics": "Class Statistics",
+    "standing": "Standing",
+    "moving": "Moving",
+    "stopped": "Stopped",
+    "person": "Person",
+    "train": "Train"
+  },
+  "logs": {
+    "title": "Detection Logs",
+    "id": "ID",
+    "trackId": "Track ID",
+    "class": "Class",
+    "activity": "Activity",
+    "confidence": "Confidence",
+    "timestamp": "Timestamp",
+    "camera": "Camera",
+    "noLogs": "No logs available",
+    "filters": {
+      "class": "Filter by class",
+      "activity": "Filter by activity",
+      "camera": "Filter by camera"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "english": "English",
+    "russian": "Russian"
+  }
+}
+

@@ -1,0 +1,29 @@
+{
+  "camera-1": {
+    "source": "data/raw/ремонты.mov",
+    "name": "Camera 1",
+    "output": null,
+    "device": null,
+    "det_model": null,
+    "imgsz": null,
+    "conf_threshold": null,
+    "conf_person": null,
+    "conf_train": null,
+    "resize": null,
+    "max_frames": null
+  },
+  "camera-2": {
+    "source": "data/raw/ремонты.mov",
+    "name": "Camera 2",
+    "output": null,
+    "device": null,
+    "det_model": null,
+    "imgsz": null,
+    "conf_threshold": null,
+    "conf_person": null,
+    "conf_train": null,
+    "resize": null,
+    "max_frames": null
+  }
+}
+

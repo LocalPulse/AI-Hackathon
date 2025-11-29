@@ -1,0 +1,64 @@
+{
+  "camera-2": {
+    "tracks": [
+      {
+        "track_id": 1,
+        "class_name": "person",
+        "activity": "standing",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 2,
+        "class_name": "train",
+        "activity": "moving",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 3,
+        "class_name": "person",
+        "activity": "moving",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 4,
+        "class_name": "person",
+        "activity": "standing",
+        "confidence": 0.9
+      }
+    ],
+    "heartbeat": 1764458663.0363066,
+    "start_time": 1764458662.6210787,
+    "status": "running"
+  },
+  "camera-1": {
+    "tracks": [
+      {
+        "track_id": 1,
+        "class_name": "person",
+        "activity": "standing",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 2,
+        "class_name": "train",
+        "activity": "moving",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 3,
+        "class_name": "person",
+        "activity": "moving",
+        "confidence": 0.9
+      },
+      {
+        "track_id": 4,
+        "class_name": "person",
+        "activity": "moving",
+        "confidence": 0.9
+      }
+    ],
+    "heartbeat": 1764458662.9745927,
+    "start_time": 1764458662.7104292,
+    "status": "running"
+  }
+}

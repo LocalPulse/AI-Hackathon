@@ -22,11 +22,12 @@ class DetectionWorker:
         det_model,
         tracker: Tracker,
         config: PipelineConfig,
-        classifier: Optional[ActivityClassifier]
+        classifier: Optional[ActivityClassifier],
+        camera_id: Optional[str] = None
     ):
         self._tracker = tracker
         self._frame_detector = FrameDetector(det_model, config)
-        self._track_processor = TrackProcessor(det_model, classifier)
+        self._track_processor = TrackProcessor(det_model, classifier, camera_id=camera_id)
         
         self._queue: queue.Queue = queue.Queue(maxsize=1)
         self._tracks: List[Track] = []
