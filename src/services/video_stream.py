@@ -18,7 +18,6 @@ def main():
     parser.add_argument("--conf-threshold", type=float, default=None, help="Confidence threshold (default: from config.yaml)")
     parser.add_argument("--conf-person", type=float, default=None, help="Person confidence (default: from config.yaml)")
     parser.add_argument("--conf-train", type=float, default=None, help="Vehicle confidence (default: from config.yaml)")
-    parser.add_argument("--skip-clothing", action="store_true")
     parser.add_argument("--resize", nargs=2, type=int, default=None, metavar=("W", "H"), help="Resize dimensions (default: from config.yaml)")
     parser.add_argument("--max-frames", type=int)
     args = parser.parse_args()
@@ -37,7 +36,6 @@ def main():
         conf_threshold=args.conf_threshold,
         conf_person=args.conf_person,
         conf_train=args.conf_train,
-        skip_clothing=args.skip_clothing,
     )
     
     resize = tuple(args.resize) if args.resize else None

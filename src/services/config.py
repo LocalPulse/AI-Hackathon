@@ -16,7 +16,6 @@ class PipelineConfig:
     conf_person: Optional[float] = None
     conf_train: Optional[float] = None
     activity_window: Optional[int] = None
-    skip_clothing: Optional[bool] = None
     
     # Tracker parameters
     tracker_iou_threshold: Optional[float] = None
@@ -27,14 +26,6 @@ class PipelineConfig:
     activity_person_speed_threshold: Optional[float] = None
     activity_vehicle_displacement_threshold: Optional[float] = None
     activity_vehicle_min_history: Optional[int] = None
-    
-    # Clothing detection parameters
-    clothing_enabled: Optional[bool] = None
-    clothing_h_min: Optional[int] = None
-    clothing_h_max: Optional[int] = None
-    clothing_s_min: Optional[int] = None
-    clothing_v_min: Optional[int] = None
-    clothing_coverage: Optional[float] = None
     
     def __post_init__(self):
         config = get_config()
@@ -76,20 +67,6 @@ class PipelineConfig:
             self.activity_vehicle_displacement_threshold = config["activity"]["vehicle"]["displacement_threshold"]
         if self.activity_vehicle_min_history is None:
             self.activity_vehicle_min_history = config["activity"]["vehicle"]["min_history"]
-        
-        # Clothing
-        if self.skip_clothing is None:
-            self.skip_clothing = not config["clothing"]["enabled"]
-        if self.clothing_h_min is None:
-            self.clothing_h_min = config["clothing"]["high_vis"]["h_min"]
-        if self.clothing_h_max is None:
-            self.clothing_h_max = config["clothing"]["high_vis"]["h_max"]
-        if self.clothing_s_min is None:
-            self.clothing_s_min = config["clothing"]["high_vis"]["s_min"]
-        if self.clothing_v_min is None:
-            self.clothing_v_min = config["clothing"]["high_vis"]["v_min"]
-        if self.clothing_coverage is None:
-            self.clothing_coverage = config["clothing"]["high_vis"]["coverage"]
 
 
 PERSON_CLASSES = frozenset({"person"})

@@ -7,7 +7,7 @@ detection:
 # Confidence Thresholds
 confidence:
   threshold: 0.25   # General detection confidence threshold
-  person: 0.35      # Minimum confidence for person detection
+  person: 0.55      # Minimum confidence for person detection
   vehicle: 0.65     # Minimum confidence for vehicle detection
 
 # NMS (Non-Maximum Suppression) Configuration

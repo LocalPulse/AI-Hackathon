@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -53,15 +53,15 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_config(config_path: Optional[Union[str, Path]] = None) -> Dict[str, Any]:
     config = DEFAULT_CONFIG.copy()
     
     if config_path is None:
         # Search for config.yaml in project root
         project_root = Path(__file__).parent.parent.parent
         config_path = project_root / "config.yaml"
-    
-    config_path = Path(config_path)
+    else:
+        config_path = Path(config_path)
     
     if not config_path.exists():
         logger.warning(f"Config file not found at {config_path}, using defaults")

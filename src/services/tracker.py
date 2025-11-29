@@ -67,6 +67,8 @@ class Matcher:
         
         while iou_matrix.size > 0:
             i, j = np.unravel_index(iou_matrix.argmax(), iou_matrix.shape)
+            i = int(i)
+            j = int(j)
             iou_value = iou_matrix[i, j]
             
             if iou_value < self.iou_threshold:
@@ -142,7 +144,7 @@ class Tracker:
         self.tracks: Dict[int, Track] = {}
     
     def update(self, detections: List[Detection]):
-        boxes = [tuple(d[:4]) for d in detections]
+        boxes: List[BBox] = [tuple(d[:4]) for d in detections]  # type: ignore
         classes = [int(d[4]) for d in detections]
         scores = [float(d[5]) for d in detections]
         

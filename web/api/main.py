@@ -1,20 +1,14 @@
-"""
-FastAPI application for YOLO detection monitoring.
-Provides REST API endpoints for accessing detection logs and statistics.
-"""
+import sys
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
 from typing import List, Optional
-import sys
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-from src.utils.data_base import get_detections, get_detection_count
-from src.utils.shared_state import get_shared_state
+from api.utils.database import get_detections, get_detection_count
+from api.utils.shared_state import get_shared_state
 
 app = FastAPI(
     title="YOLO Detection Monitoring API",
@@ -31,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 # Pydantic models
 class Detection(BaseModel):
@@ -64,7 +59,6 @@ class CurrentStats(BaseModel):
 
 
 # Endpoints
-
 @app.get("/")
 async def root():
     """Root endpoint with API information."""
@@ -109,14 +103,14 @@ async def get_detection_logs(
         
         # Convert 'class' field to 'class_name' for Pydantic model
         formatted_detections = [
-            {
-                "id": d["id"],
-                "track_id": d["track_id"],
-                "class_name": d["class"],
-                "activity": d["activity"],
-                "confidence": d["confidence"],
-                "timestamp": d["timestamp"]
-            }
+            Detection(
+                id=d["id"],
+                track_id=d["track_id"],
+                class_name=d["class"],
+                activity=d["activity"],
+                confidence=d["confidence"],
+                timestamp=d["timestamp"]
+            )
             for d in detections
         ]
         

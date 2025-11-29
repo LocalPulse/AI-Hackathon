@@ -14,7 +14,7 @@ ACTIVITY_COLORS = {
 
 def get_track_color(track_id: int) -> Tuple[int, int, int]:
     rng = np.random.RandomState(track_id)
-    return tuple(int(rng.randint(60, 220)) for _ in range(3))
+    return (int(rng.randint(60, 220)), int(rng.randint(60, 220)), int(rng.randint(60, 220)))
 
 
 def get_activity_color(activity: str) -> Tuple[int, int, int]:
@@ -22,7 +22,8 @@ def get_activity_color(activity: str) -> Tuple[int, int, int]:
 
 
 def fade_color(color: Tuple, factor: float) -> Tuple[int, int, int]:
-    return tuple(int(c * factor) for c in color)
+    r, g, b = color[:3]
+    return (int(r * factor), int(g * factor), int(b * factor))
 
 
 def draw_dashed_rect(frame: np.ndarray, pt1: Tuple, pt2: Tuple, color: Tuple, thickness: int = 2, dash_len: int = 10):
