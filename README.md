@@ -220,9 +220,6 @@ docker-compose logs -f api
 
 See [Deployment Guide](docs/DEPLOYMENT.md) for detailed troubleshooting.
 
-## License
-
-[Specify license]
 
 ## Support
 
