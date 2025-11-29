@@ -24,6 +24,8 @@ class Track:
     activity_history: List = field(default_factory=list)
     keypoints: Optional[np.ndarray] = None
     cls_name: Optional[str] = None
+    previous_activity: Optional[str] = None  # For tracking activity changes
+
 
     def predict_bbox(self) -> Tuple[float, float, float, float]:
         """Predict next position based on velocity."""

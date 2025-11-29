@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 
 from src.core.config_loader import get_config
 
 
 @dataclass
 class PipelineConfig:
-    source: str | int = 0
+    source: Union[str, int] = 0
     output: Optional[str] = None
     device: Optional[str] = None
     det_model: Optional[str] = None

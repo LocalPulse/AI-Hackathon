@@ -14,6 +14,8 @@ from src.services.config import PipelineConfig, PERSON_CLASSES, VEHICLE_CLASSES
 from src.services.detector import load_model
 from src.services.tracker import Tracker, Track
 from src.utils.visualizer import draw_tracks
+from src.utils.data_base import log_detection
+from src.utils.shared_state import get_shared_state
 
 try:
     from src.services.activity import ActivityClassifier
@@ -98,6 +100,8 @@ class Worker:
             
             self._classify(tracks)  # Activity classification
             self._detect_clothing(frame, tracks)  # PPE detection
+            self._log_activity_changes(tracks)  # Log to database
+            self._update_shared_state(tracks)  # Update shared state
             
             with self._lock:
                 self._tracks = tracks
@@ -148,6 +152,44 @@ class Worker:
             track.cls_name = get_class_name(names, track.cls)
         if self._classifier:
             self._classifier.update_tracks(tracks)
+    
+    def _log_activity_changes(self, tracks: List[Track]):
+        """Log detections to database when activity changes."""
+        for track in tracks:
+            # Only log for person and train classes
+            if track.cls_name not in ['person', 'train']:
+                continue
+            
+            # Log if activity exists and has changed (or is first time)
+            if track.activity and track.activity != track.previous_activity:
+                try:
+                    log_detection(
+                        track_id=track.id,
+                        class_name=track.cls_name,
+                        activity=track.activity,
+                        confidence=track.activity_conf
+                    )
+                    track.previous_activity = track.activity
+                except Exception as e:
+                    logger.warning(f"Failed to log detection: {e}")
+    
+    def _update_shared_state(self, tracks: List[Track]):
+        """Update shared state with current active tracks."""
+        try:
+            shared_state = get_shared_state()
+            track_data = [
+                {
+                    'track_id': track.id,
+                    'class_name': track.cls_name or 'unknown',
+                    'activity': track.activity or 'unknown',
+                    'confidence': track.activity_conf
+                }
+                for track in tracks
+                if track.cls_name in ['person', 'train']
+            ]
+            shared_state.update_tracks(track_data)
+        except Exception as e:
+            logger.warning(f"Failed to update shared state: {e}")
 
     def _detect_clothing(self, frame: np.ndarray, tracks: List[Track]):
         """Detect high-visibility clothing for person tracks."""
