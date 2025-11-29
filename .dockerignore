@@ -19,7 +19,7 @@ Dockerfile*
 
 # Data / storage
 data/
-models/
+# models/ - commented out, models are needed in container
 
 # IDE
 .vscode/

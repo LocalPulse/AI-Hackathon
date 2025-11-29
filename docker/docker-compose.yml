@@ -1,7 +1,5 @@
 # Usage: docker-compose up --build
 
-version: "3.8"
-
 services:
   pipeline:
     build:
@@ -16,4 +14,4 @@ services:
       - ../output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: ["--source", "/app/data/raw/video.mp4", "--output", "/app/output/result.mp4"]
+    command: ["--source", "/app/data/raw/ремонты.mov", "--output", "/app/output/result.mp4"]

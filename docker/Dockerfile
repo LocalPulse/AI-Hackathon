@@ -20,7 +20,7 @@ WORKDIR /app
 # System dependencies for OpenCV and video processing
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
@@ -34,6 +34,8 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 # CPU stage
 FROM base AS cpu
 
+# Install PyTorch CPU version (works on both x86_64 and ARM64)
+# Note: For Apple Silicon, CPU version will work but may be slower than native MPS
 RUN pip install --no-cache-dir \
     torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
