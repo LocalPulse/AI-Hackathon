@@ -41,14 +41,26 @@ h1, h2, h3, h4, h5, h6 {
   color: __TEXT__ !important;
 }
 
-/* Sidebar styling */
+/* Sidebar styling - полностью скрыт */
 [data-testid="stSidebar"] {
-  background-color: #000000 !important;
+  display: none !important;
+  visibility: hidden !important;
 }
 
-/* Ensure ALL sidebar text is white and readable */
 [data-testid="stSidebar"] * {
-  color: #FFFFFF !important;
+  display: none !important;
+}
+
+button[data-testid="baseButton-header"] {
+  display: none !important;
+}
+
+[data-testid="stHeader"] button[kind="header"] {
+  display: none !important;
+}
+
+[data-testid="stSidebar"] * {
+  color: __SIDEBAR_TEXT__ !important;
 }
 
 [data-testid="stSidebar"] h1,
@@ -59,41 +71,132 @@ h1, h2, h3, h4, h5, h6 {
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] span,
 [data-testid="stSidebar"] div {
-  color: #FFFFFF !important;
+  color: __SIDEBAR_TEXT__ !important;
 }
 
 [data-testid="stSidebar"] button {
-  color: #FFFFFF !important;
-  background-color: #1a1a1a !important;
-  border: 1px solid #FFFFFF !important;
+  color: __SIDEBAR_TEXT__ !important;
+  background-color: __SIDEBAR_BUTTON_BG__ !important;
+  border: 1px solid __SIDEBAR_TEXT__ !important;
 }
 [data-testid="stSidebar"] button:hover {
-  background-color: #333333 !important;
+  background-color: __SIDEBAR_BUTTON_HOVER__ !important;
 }
 
 [data-testid="stSidebar"] details {
   background-color: transparent !important;
 }
 [data-testid="stSidebar"] summary {
-  color: #FFFFFF !important;
+  color: __SIDEBAR_TEXT__ !important;
   background-color: transparent !important;
 }
 [data-testid="stSidebar"] summary:hover {
-  background-color: #1a1a1a !important;
+  background-color: __SIDEBAR_BUTTON_BG__ !important;
 }
 
 [data-testid="stSidebar"] input {
-  color: #000000 !important;
-  background-color: #FFFFFF !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+  background-color: __SIDEBAR_INPUT_BG__ !important;
 }
 [data-testid="stSidebar"] label {
-  color: #FFFFFF !important;
+  color: __SIDEBAR_TEXT__ !important;
 }
 
 [data-testid="stSidebar"] select,
 [data-testid="stSidebar"] option {
-  color: #000000 !important;
-  background-color: #FFFFFF !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > label {
+  color: __SIDEBAR_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+  border: 1px solid __SIDEBAR_BORDER__ !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div:hover {
+  border-color: __SIDEBAR_BORDER_HOVER__ !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div[data-baseweb="select"] {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="select"] > div {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+  border: 1px solid __SIDEBAR_BORDER__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] ul {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] li {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] li[aria-selected="true"] {
+  background-color: __SIDEBAR_BUTTON_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] > div {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] * {
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] [role="option"],
+[data-testid="stSidebar"] [data-baseweb="popover"] [role="option"] * {
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+  background-color: __SIDEBAR_INPUT_BG__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] [role="option"]:hover,
+[data-testid="stSidebar"] [data-baseweb="popover"] [role="option"]:hover * {
+  background-color: __SIDEBAR_BUTTON_HOVER__ !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] li,
+[data-testid="stSidebar"] [data-baseweb="popover"] li *,
+[data-testid="stSidebar"] [data-baseweb="popover"] span,
+[data-testid="stSidebar"] [data-baseweb="popover"] div,
+[data-testid="stSidebar"] [data-baseweb="popover"] p,
+[data-testid="stSidebar"] [data-baseweb="popover"] a,
+[data-testid="stSidebar"] [data-baseweb="popover"] button {
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover,
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover *,
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover span,
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover div,
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover p {
+  background-color: __SIDEBAR_BUTTON_HOVER__ !important;
+  color: __SIDEBAR_INPUT_TEXT__ !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="popover"] li:hover {
+  background-color: __SIDEBAR_BUTTON_HOVER__ !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div:focus,
+[data-testid="stSidebar"] .stSelectbox > div > div:focus-within {
+  border-color: __SIDEBAR_BORDER_HOVER__ !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Main content text */
@@ -126,4 +229,177 @@ p, span, div, label, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
 /* Override any remaining inline styles */
 [style*="color"] {
   color: __TEXT__ !important;
+}
+
+/* Component cards */
+[data-testid="stContainer"] {
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Camera cards */
+.stMetric {
+  background-color: __METRIC_BG__ !important;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+/* Plotly charts */
+.js-plotly-plot {
+  background-color: transparent !important;
+}
+
+/* Buttons */
+.stButton > button {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Selectbox and inputs */
+.stSelectbox > div > div {
+  background-color: __BG__ !important;
+  color: __TEXT__ !important;
+  border: 1px solid __BORDER_COLOR__ !important;
+}
+
+.stSelectbox > div > div:hover {
+  border-color: __BORDER_HOVER__ !important;
+}
+
+.stSelectbox label {
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="select"] {
+  background-color: __BG__ !important;
+}
+
+.stSelectbox [data-baseweb="select"] > div {
+  background-color: __BG__ !important;
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] {
+  background-color: __BG__ !important;
+  border: 1px solid __BORDER_COLOR__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] ul {
+  background-color: __BG__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] li {
+  background-color: __BG__ !important;
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] li[aria-selected="true"] {
+  background-color: __POPOVER_HOVER__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] > div {
+  background-color: __BG__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] * {
+  background-color: __BG__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] [role="option"],
+.stSelectbox [data-baseweb="popover"] [role="option"] * {
+  color: __TEXT__ !important;
+  background-color: __BG__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] [role="option"]:hover,
+.stSelectbox [data-baseweb="popover"] [role="option"]:hover * {
+  background-color: __POPOVER_HOVER__ !important;
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] li,
+.stSelectbox [data-baseweb="popover"] li *,
+.stSelectbox [data-baseweb="popover"] span,
+.stSelectbox [data-baseweb="popover"] div,
+.stSelectbox [data-baseweb="popover"] p,
+.stSelectbox [data-baseweb="popover"] a,
+.stSelectbox [data-baseweb="popover"] button {
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] li:hover,
+.stSelectbox [data-baseweb="popover"] li:hover *,
+.stSelectbox [data-baseweb="popover"] li:hover span,
+.stSelectbox [data-baseweb="popover"] li:hover div,
+.stSelectbox [data-baseweb="popover"] li:hover p {
+  background-color: __POPOVER_HOVER__ !important;
+  color: __TEXT__ !important;
+}
+
+.stSelectbox [data-baseweb="popover"] li:hover {
+  background-color: __POPOVER_HOVER__ !important;
+}
+
+.stSelectbox > div > div:focus,
+.stSelectbox > div > div:focus-within {
+  border-color: __BORDER_HOVER__ !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Dataframe styling improvements */
+.stDataFrame {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Tabs active state */
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+  border-bottom: 2px solid __TEXT__ !important;
+}
+
+/* Metric containers */
+[data-testid="stMetricContainer"] {
+  background-color: __METRIC_BG__ !important;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Additional light theme adjustments */
+.stTabs [data-baseweb="tab-list"] {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+  color: __TEXT__ !important;
+  opacity: 0.7;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+  opacity: 1;
+  color: __TEXT__ !important;
+}
+
+/* Divider styling */
+hr {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* bui50__anchor styling */
+.bui50__anchor,
+[class*="bui50__anchor"] {
+  color: __ANCHOR_TEXT__ !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stMetric {
+    font-size: 0.9rem;
+  }
 }
