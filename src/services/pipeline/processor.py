@@ -82,7 +82,7 @@ class Pipeline:
     
     def _get_video_params(self, cap: cv2.VideoCapture, resize: Optional[Tuple[int, int]]) -> Tuple[float, Tuple[int, int]]:
         """Get video FPS and resize parameters."""
-        from src.core.config_loader import get_config
+        from src.core.config import get_config
         config = get_config()
         
         default_fps = config["video"]["default_fps"]

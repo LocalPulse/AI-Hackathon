@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from pathlib import Path
 
-from api.utils.database import get_detections, get_detection_count
+from api.utils.database import get_logs, get_log_count
 from api.utils.shared_state import get_shared_state
 
 app = FastAPI(
@@ -89,14 +89,14 @@ async def get_detection_logs(
     - **activity_filter**: Filter by activity (standing, moving, stopped)
     """
     try:
-        detections = get_detections(
+        logs = get_logs(
             limit=limit,
             offset=offset,
             class_filter=class_filter,
             activity_filter=activity_filter
         )
         
-        total = get_detection_count(
+        total = get_log_count(
             class_filter=class_filter,
             activity_filter=activity_filter
         )
@@ -104,14 +104,14 @@ async def get_detection_logs(
         # Convert 'class' field to 'class_name' for Pydantic model
         formatted_detections = [
             Detection(
-                id=d["id"],
-                track_id=d["track_id"],
-                class_name=d["class"],
-                activity=d["activity"],
-                confidence=d["confidence"],
-                timestamp=d["timestamp"]
+                id=log["id"],
+                track_id=log["track_id"],
+                class_name=log["class"],
+                activity=log["activity"],
+                confidence=log["confidence"],
+                timestamp=log["timestamp"]
             )
-            for d in detections
+            for log in logs
         ]
         
         return DetectionResponse(

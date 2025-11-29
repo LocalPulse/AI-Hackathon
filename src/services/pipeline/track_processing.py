@@ -4,7 +4,7 @@ from typing import List, Optional
 from src.services.tracker import Track
 from src.services.activity import ActivityClassifier
 from src.services.pipeline.utils import get_class_name
-from src.utils.data_base import log_detection
+from src.utils.data_base import log_activity
 from src.utils.shared_state import get_shared_state
 
 logger = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ class TrackProcessor:
             self._classifier.update_tracks(tracks)
     
     def _log_activity_changes(self, tracks: List[Track]):
-        """Log detections to database when activity changes."""
-        if log_detection is None:
+        """Log activities to database when activity changes."""
+        if log_activity is None:
             return
         
         for track in tracks:
@@ -56,14 +56,14 @@ class TrackProcessor:
     
     def _log_track_activity(self, track: Track):
         """Log track activity to database."""
-        if log_detection is None:
+        if log_activity is None:
             return
         
         if track.cls_name is None or track.activity is None:
             return
         
         try:
-            log_detection(
+            log_activity(
                 track_id=track.id,
                 class_name=track.cls_name,
                 activity=track.activity,
@@ -71,7 +71,7 @@ class TrackProcessor:
             )
             track.previous_activity = track.activity
         except Exception as e:
-            logger.warning(f"Failed to log detection: {e}")
+            logger.warning(f"Failed to log activity: {e}")
     
     def _update_shared_state(self, tracks: List[Track]):
         """Update shared state with current active tracks."""

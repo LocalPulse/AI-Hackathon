@@ -9,7 +9,11 @@ from pathlib import Path
 from ultralytics import YOLO # type: ignore
 from typing import Optional
 
-from src.utils.weights_manager import MODEL_URLS, download_file  # type: ignore
+try:
+    from src.utils.weights_manager import MODEL_URLS, download_file  # type: ignore
+except ImportError:
+    MODEL_URLS = {}
+    download_file = None
 
 logger = logging.getLogger(__name__)
 

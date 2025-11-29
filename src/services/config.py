@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from src.core.config_loader import get_config
+from src.core.config import get_config
 
 
 @dataclass

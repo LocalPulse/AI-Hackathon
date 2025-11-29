@@ -8,10 +8,10 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path(__file__).parent.parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 DATABASE_DIR = PROJECT_ROOT / "data" / "database"
 DATABASE_DIR.mkdir(parents=True, exist_ok=True)
-DETECTIONS_DB = str(DATABASE_DIR / "detections.db")
+LOGS_DB = str(DATABASE_DIR / "logs.db")
 
 _db_lock = threading.Lock()
 
@@ -21,7 +21,7 @@ def _get_connection():
     """Context manager for database connections."""
     conn = None
     try:
-        conn = sqlite3.connect(DETECTIONS_DB, check_same_thread=False)
+        conn = sqlite3.connect(LOGS_DB, check_same_thread=False)
         conn.row_factory = sqlite3.Row
         yield conn
     except sqlite3.Error as e:
@@ -32,10 +32,10 @@ def _get_connection():
             conn.close()
 
 
-def init_detections_db():
-    """Initialize detections database with required table."""
+def init_logs_db():
+    """Initialize logs database with required table."""
     sql = """
-    CREATE TABLE IF NOT EXISTS detections (
+    CREATE TABLE IF NOT EXISTS logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         track_id INTEGER NOT NULL,
         class TEXT NOT NULL,
@@ -51,10 +51,10 @@ def init_detections_db():
                 conn.execute(sql)
                 conn.commit()
         except sqlite3.Error as e:
-            logger.error(f"Error initializing detections DB: {e}")
+            logger.error(f"Error initializing logs DB: {e}")
 
 
-def log_detection(
+def log_activity(
     track_id: int,
     class_name: str,
     activity: str,
@@ -62,7 +62,7 @@ def log_detection(
     timestamp: Optional[str] = None
 ):
     """
-    Log a detection to the database.
+    Log an activity to the database.
     
     Args:
         track_id: Unique track ID
@@ -75,7 +75,7 @@ def log_detection(
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     sql = """
-    INSERT INTO detections (track_id, class, activity, confidence, timestamp)
+    INSERT INTO logs (track_id, class, activity, confidence, timestamp)
     VALUES (?, ?, ?, ?, ?)
     """
     
@@ -85,7 +85,7 @@ def log_detection(
                 conn.execute(sql, (track_id, class_name, activity, confidence, timestamp))
                 conn.commit()
         except sqlite3.Error as e:
-            logger.error(f"Error logging detection: {e}")
+            logger.error(f"Error logging activity: {e}")
 
 
 def _build_filter_query(
@@ -93,7 +93,7 @@ def _build_filter_query(
     activity_filter: Optional[str]
 ) -> tuple[str, List]:
     """Build SQL query with optional filters."""
-    sql = "SELECT * FROM detections WHERE 1=1"
+    sql = "SELECT * FROM logs WHERE 1=1"
     params = []
     
     if class_filter:
@@ -107,14 +107,14 @@ def _build_filter_query(
     return sql, params
 
 
-def get_detections(
+def get_logs(
     limit: int = 100,
     offset: int = 0,
     class_filter: Optional[str] = None,
     activity_filter: Optional[str] = None
 ) -> List[Dict]:
     """
-    Retrieve detections from database.
+    Retrieve logs from database.
     
     Args:
         limit: Maximum number of records to return
@@ -123,7 +123,7 @@ def get_detections(
         activity_filter: Filter by activity (optional)
     
     Returns:
-        List of detection dictionaries
+        List of log dictionaries
     """
     sql, params = _build_filter_query(class_filter, activity_filter)
     sql += " ORDER BY timestamp DESC, id DESC LIMIT ? OFFSET ?"
@@ -137,7 +137,7 @@ def get_detections(
                 rows = cursor.fetchall()
                 return _rows_to_dicts(rows)
         except sqlite3.Error as e:
-            logger.error(f"Error retrieving detections: {e}")
+            logger.error(f"Error retrieving logs: {e}")
             return []
 
 
@@ -156,11 +156,11 @@ def _rows_to_dicts(rows: List) -> List[Dict]:
     ]
 
 
-def get_detection_count(
+def get_log_count(
     class_filter: Optional[str] = None,
     activity_filter: Optional[str] = None
 ) -> int:
-    """Get total count of detections with optional filters."""
+    """Get total count of logs with optional filters."""
     sql, params = _build_filter_query(class_filter, activity_filter)
     sql = sql.replace("SELECT *", "SELECT COUNT(*) as count")
     
@@ -172,9 +172,9 @@ def get_detection_count(
                 row = cursor.fetchone()
                 return row["count"] if row else 0
         except sqlite3.Error as e:
-            logger.error(f"Error getting detection count: {e}")
+            logger.error(f"Error getting log count: {e}")
             return 0
 
 
-# Initialize detections database on module import
-init_detections_db()
+# Initialize logs database on module import
+init_logs_db()
