@@ -53,7 +53,7 @@ def example_2_process_and_display():
         # Запускаем дашборд
         # integration.launch_dashboard(str(output_path))
     else:
-        print("❌ Не удалось загрузить файл")
+        print("Не удалось загрузить файл")
 
 
 def example_3_batch_processing():
@@ -70,7 +70,7 @@ def example_3_batch_processing():
     print(f"Обработка файлов в директории: {directory}")
     processed_files = integration.batch_process_directory(directory, pattern="*.csv")
     
-    print(f"✅ Обработано {len(processed_files)} файлов")
+    print(f"Обработано {len(processed_files)} файлов")
     for file in processed_files:
         print(f"   - {file.name}")
 
@@ -153,12 +153,12 @@ def create_sample_data():
         output_path.parent.mkdir(parents=True, exist_ok=True)
         data.to_csv(output_path, index=False)
         
-        print(f"✅ Пример данных создан: {output_path}")
+        print(f"Пример данных создан: {output_path}")
         print(f"   Размер: {len(data)} записей")
         print(f"   Колонки: {list(data.columns)}")
         
     except ImportError:
-        print("❌ Требуется установить pandas и numpy")
+        print("Требуется установить pandas и numpy")
 
 
 def main():
@@ -197,7 +197,7 @@ def main():
     elif choice == "0":
         print("До свидания!")
     else:
-        print("❌ Неверный выбор")
+        print("Неверный выбор")
 
 
 if __name__ == "__main__":
