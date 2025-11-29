@@ -13,20 +13,55 @@ AI-Hackathon is a production-ready system for processing multiple camera streams
 
 ## Quick Start
 
+For fastest setup, see [QUICKSTART.md](QUICKSTART.md) for automated installation scripts.
+
 ### Prerequisites
 
+**For Development:**
+- Python 3.10+
+- Node.js 18+
+- npm
+- 8GB+ RAM
+- CUDA-compatible GPU (optional, for acceleration)
+
+**For Docker Deployment:**
 - Docker 20.10+
 - Docker Compose 2.0+
 - 8GB+ RAM
 - CUDA-compatible GPU (optional, for acceleration)
 
-### Installation
+### Quick Setup (Development)
 
+**For Linux/macOS:**
 ```bash
 # Clone repository
 git clone <repository-url>
 cd AI-Hackathon
 
+# Run setup script
+./scripts/setup_dev.sh
+```
+
+**For Windows:**
+```powershell
+# Clone repository
+git clone <repository-url>
+cd AI-Hackathon
+
+# Run setup script
+.\scripts\setup_dev.ps1
+```
+
+The setup script will:
+- Check and verify Python 3.10+, Node.js 18+, and npm
+- Create required directories
+- Set up configuration files
+- Install Python and Node.js dependencies
+- Verify installation
+
+### Docker Deployment (Production)
+
+```bash
 # Create camera configuration
 cp config/cameras.json.example config/cameras.json
 # Edit config/cameras.json with your camera settings
@@ -81,6 +116,7 @@ Edit `config.yaml` for detection and tracking parameters.
 
 ## Documentation
 
+- **[Quick Start Guide](QUICKSTART.md)** - Fast setup for demonstrations and development
 - **[Architecture](docs/ARCHITECTURE.md)** - System architecture and design documentation
 - **[Deployment Guide](docs/DEPLOYMENT.md)** - Complete deployment and operations documentation for DevOps engineers
 - **[API Documentation](http://localhost:8000/docs)** - Interactive API documentation (available when API service is running)
@@ -139,7 +175,23 @@ React-based dashboard for:
 
 ## Development
 
-### Local Development
+### Quick Start
+
+Use the setup script for automatic environment configuration:
+
+**Linux/macOS:**
+```bash
+./scripts/setup_dev.sh
+```
+
+**Windows:**
+```powershell
+.\scripts\setup_dev.ps1
+```
+
+### Manual Setup
+
+If you prefer manual setup:
 
 ```bash
 # Install Python dependencies
@@ -150,14 +202,14 @@ cd web/frontend
 npm install
 
 # Run services locally
-# AI Service
+# Terminal 1: AI Service
 python -m src.services.camera_manager --config config/cameras.json
 
-# API Service
+# Terminal 2: API Service
 cd web/api
 uvicorn main:app --reload
 
-# Frontend
+# Terminal 3: Frontend
 cd web/frontend
 npm run dev
 ```
