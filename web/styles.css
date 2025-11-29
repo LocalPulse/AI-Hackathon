@@ -1,0 +1,129 @@
+/* Styles for Streamlit dashboard
+   Placeholders:
+     __FONT__  - font-family string
+     __BG__    - background color (hex or named)
+     __TEXT__  - primary text color
+*/
+
+/* Global font and app colors */
+* {
+  font-family: __FONT__, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+.stApp {
+  background-color: __BG__ !important;
+  color: __TEXT__ !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: __TEXT__ !important;
+}
+
+/* Metric values and labels */
+[data-testid="stMetricValue"] {
+  color: __TEXT__ !important;
+}
+[data-testid="stMetricLabel"] {
+  color: __TEXT__ !important;
+}
+
+/* DataFrame/table styling */
+.stDataFrame, .stDataFrame table, .stDataFrame th, .stDataFrame td {
+  background-color: __BG__ !important;
+  color: __TEXT__ !important;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+  background-color: __BG__ !important;
+}
+.stTabs [data-baseweb="tab"] {
+  color: __TEXT__ !important;
+}
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+  background-color: #000000 !important;
+}
+
+/* Ensure ALL sidebar text is white and readable */
+[data-testid="stSidebar"] * {
+  color: #FFFFFF !important;
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] .stMarkdown,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div {
+  color: #FFFFFF !important;
+}
+
+[data-testid="stSidebar"] button {
+  color: #FFFFFF !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #FFFFFF !important;
+}
+[data-testid="stSidebar"] button:hover {
+  background-color: #333333 !important;
+}
+
+[data-testid="stSidebar"] details {
+  background-color: transparent !important;
+}
+[data-testid="stSidebar"] summary {
+  color: #FFFFFF !important;
+  background-color: transparent !important;
+}
+[data-testid="stSidebar"] summary:hover {
+  background-color: #1a1a1a !important;
+}
+
+[data-testid="stSidebar"] input {
+  color: #000000 !important;
+  background-color: #FFFFFF !important;
+}
+[data-testid="stSidebar"] label {
+  color: #FFFFFF !important;
+}
+
+[data-testid="stSidebar"] select,
+[data-testid="stSidebar"] option {
+  color: #000000 !important;
+  background-color: #FFFFFF !important;
+}
+
+/* Main content text */
+.stApp p, .stApp span, .stApp div:not([data-testid="stSidebar"] div), .stApp label {
+  color: __TEXT__ !important;
+}
+.stApp .stMarkdown {
+  color: __TEXT__ !important;
+}
+
+/* Small helpers */
+.stAlert, .stWarning {
+  color: __TEXT__ !important;
+}
+
+/* ENSURE ALL TEXT IS UNIFIED COLOR */
+body, body * {
+  color: __TEXT__ !important;
+}
+
+.stApp, .stApp * {
+  color: __TEXT__ !important;
+}
+
+/* Force color on all text elements */
+p, span, div, label, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
+  color: __TEXT__ !important;
+}
+
+/* Override any remaining inline styles */
+[style*="color"] {
+  color: __TEXT__ !important;
+}
