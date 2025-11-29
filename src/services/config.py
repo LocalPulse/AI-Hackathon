@@ -6,6 +6,7 @@ from src.core.config import get_config
 
 @dataclass
 class PipelineConfig:
+    """Pipeline configuration with automatic defaults from config.yaml."""
     source: Union[str, int] = 0
     output: Optional[str] = None
     device: Optional[str] = None

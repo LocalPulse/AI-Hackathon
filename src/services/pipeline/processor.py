@@ -38,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 
 class Pipeline:
-    """Main pipeline for video processing with detection and tracking."""
     
     def __init__(self, config: PipelineConfig, camera_id: Optional[str] = None):
         self._config = config

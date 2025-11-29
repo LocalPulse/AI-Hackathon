@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessManager:
-    """Manages camera processes lifecycle."""
     
     def __init__(self):
         self._processes: List[multiprocessing.Process] = []

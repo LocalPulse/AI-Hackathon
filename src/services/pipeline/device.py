@@ -6,7 +6,6 @@ logger = logging.getLogger(__name__)
 
 
 def detect_device(requested: Optional[str] = None) -> str:
-    """Detect available compute device (CUDA or CPU)."""
     if requested:
         return requested
     

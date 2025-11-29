@@ -8,33 +8,34 @@ import numpy as np
 
 @dataclass
 class Track:
+    """Represents a tracked object across multiple frames."""
     id: int
-    bbox: Tuple[float, float, float, float]
+    bbox: Tuple[float, float, float, float]  # (x1, y1, x2, y2)
     cls: int
     score: float
     last_seen: float = field(default_factory=time.time)
     hits: int = 1
     lost_frames: int = 0
-    history: List[Tuple[int, int]] = field(default_factory=list)
-    velocity: Tuple[float, float] = (0.0, 0.0)
+    history: List[Tuple[int, int]] = field(default_factory=list)  # Center positions
+    velocity: Tuple[float, float] = (0.0, 0.0)  # (vx, vy) pixels per frame
     clothing: Optional[str] = None
     motion_buffer: List[float] = field(default_factory=list)
-    activity: Optional[str] = None
+    activity: Optional[str] = None  # "standing", "moving", "stopped"
     activity_conf: float = 0.0
     activity_history: List = field(default_factory=list)
     keypoints: Optional[np.ndarray] = None
     cls_name: Optional[str] = None
-    previous_activity: Optional[str] = None  # For tracking activity changes
+    previous_activity: Optional[str] = None
 
 
     def predict_bbox(self) -> Tuple[float, float, float, float]:
-        """Predict next position based on velocity."""
+        """Predict next bbox position using velocity."""
         x1, y1, x2, y2 = self.bbox
         vx, vy = self.velocity
         return (x1 + vx, y1 + vy, x2 + vx, y2 + vy)
 
     def update_velocity(self):
-        """Update velocity from history."""
+        """Update velocity from position history using weighted average."""
         if len(self.history) < 2:
             self.velocity = (0.0, 0.0)
             return
@@ -42,6 +43,7 @@ class Track:
         n = min(5, len(self.history))
         pts = self.history[-n:]
         
+        # Weighted average: more recent = higher weight
         total_vx, total_vy, total_w = 0.0, 0.0, 0.0
         for i in range(1, len(pts)):
             weight = i

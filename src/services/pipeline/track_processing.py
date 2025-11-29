@@ -11,11 +11,11 @@ from src.utils.state_sync import save_camera_tracks
 
 logger = logging.getLogger(__name__)
 
-# Constants
 VALID_CLASSES = frozenset(['person', 'train'])
 
 
 class TrackProcessor:
+    """Processes tracks: classifies activity, logs to database, updates shared state."""
     def __init__(self, det_model, classifier: Optional[ActivityClassifier], camera_id: Optional[str] = None):
         self._det_model = det_model
         self._classifier = classifier

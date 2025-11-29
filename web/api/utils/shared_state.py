@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 @dataclass
 class ActiveTrack:
-    """Represents an active track in the current frame."""
+    """Active track in current frame."""
     track_id: int
     class_name: str
     activity: str
@@ -15,7 +15,6 @@ class ActiveTrack:
 
 
 class SharedState:
-    """Thread-safe storage for active tracks from multiple cameras."""
     
     def __init__(self, timeout: float = 5.0):
         """

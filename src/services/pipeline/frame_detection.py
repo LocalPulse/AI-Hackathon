@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class FrameDetector:
-    """Handles object detection and filtering."""
     
     def __init__(self, det_model, config: PipelineConfig):
         self._det_model = det_model

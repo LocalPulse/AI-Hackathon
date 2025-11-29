@@ -9,11 +9,14 @@ from src.services.track import Track
 
 @dataclass(frozen=True)
 class Activity:
-    label: str
+    """Activity classification result."""
+    label: str  # "standing", "moving", or "stopped"
     confidence: float
 
 
 class PersonClassifier:
+    """Classifies person activity based on movement speed."""
+    
     def __init__(self, speed_threshold: float = 15.0):
         self.speed_threshold = speed_threshold
     
@@ -24,6 +27,8 @@ class PersonClassifier:
 
 
 class VehicleClassifier:
+    """Classifies vehicle activity based on displacement over time."""
+    
     def __init__(self, displacement_threshold: float = 8.0, min_history: int = 5):
         self.displacement_threshold = displacement_threshold
         self.min_history = min_history
@@ -34,6 +39,7 @@ class VehicleClassifier:
         if len(history) < self.min_history:
             return Activity("stopped", 0.85)
         
+        # Compute total displacement from start to end
         start, end = history[0], history[-1]
         displacement = math.hypot(end[0] - start[0], end[1] - start[1])
         
@@ -43,6 +49,8 @@ class VehicleClassifier:
 
 
 class ActivityClassifier:
+    """Main activity classifier that routes objects to appropriate classifier."""
+    
     PERSON_CLASSES = frozenset({"person"})
     VEHICLE_CLASSES = frozenset({"train", "truck", "bus", "car"})
     
@@ -80,6 +88,7 @@ class ActivityClassifier:
         track.activity_conf = result.confidence
 
     def _compute_speed(self, track: Track) -> float:
+        """Compute speed in pixels per second using median of recent distances."""
         history = getattr(track, "history", [])
         
         if len(history) < 3:
@@ -94,8 +103,10 @@ class ActivityClassifier:
         if not distances:
             return 0.0
         
+        # Use median to reduce noise
         distances.sort()
-        return distances[len(distances) // 2] * self.fps
+        median_distance = distances[len(distances) // 2]
+        return median_distance * self.fps
 
 
 __all__ = ["ActivityClassifier", "Activity"]

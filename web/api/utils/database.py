@@ -18,7 +18,6 @@ _db_lock = threading.Lock()
 
 @contextmanager
 def _get_connection():
-    """Context manager for database connections."""
     conn = None
     try:
         conn = sqlite3.connect(LOGS_DB, check_same_thread=False)

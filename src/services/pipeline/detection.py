@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 
 class DetectionWorker:
-    """Worker thread for async frame processing."""
     
     def __init__(
         self,

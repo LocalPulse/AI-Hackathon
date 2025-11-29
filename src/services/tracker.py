@@ -6,13 +6,12 @@ import numpy as np
 
 from src.services.track import Track
 
-# Type aliases
 BBox = Tuple[float, float, float, float]
 Detection = Tuple[float, float, float, float, int, float]  # x1, y1, x2, y2, cls, score
 
 
 def compute_iou(box_a: BBox, box_b: BBox) -> float:
-    """Compute Intersection over Union between two bounding boxes."""
+    """Compute IoU between two bounding boxes."""
     xa1, ya1, xa2, ya2 = box_a
     xb1, yb1, xb2, yb2 = box_b
     
@@ -28,32 +27,29 @@ def compute_iou(box_a: BBox, box_b: BBox) -> float:
 
 
 class Matcher:
+    """Matches detections to tracks using IoU similarity with greedy matching."""
+    
     def __init__(self, iou_threshold: float):
         self.iou_threshold = iou_threshold
     
     def match(self, detections: List[BBox], tracks: Dict[int, Track], use_prediction: bool) -> Dict[int, int]:
-        """Match detections to tracks using greedy IoU matching.
-        
-        Returns:
-            Mapping from detection index to track_id
-        """
+        """Match detections to tracks using greedy IoU matching."""
         if not tracks or not detections:
             return {}
         
         track_ids = list(tracks.keys())
         track_boxes = [self._get_track_box(tracks[tid], use_prediction) for tid in track_ids]
         iou_matrix = self._build_iou_matrix(detections, track_boxes)
-        
         return self._greedy_match(iou_matrix, track_ids)
     
     def _get_track_box(self, track: Track, use_prediction: bool) -> BBox:
-        """Get bounding box for matching (predicted or current)."""
+        """Get bbox for matching: use prediction if track is lost."""
         if track.lost_frames > 0 and use_prediction:
             return track.predict_bbox()
         return track.bbox
     
     def _build_iou_matrix(self, detections: List[BBox], track_boxes: List[BBox]) -> np.ndarray:
-        """Build IoU matrix between detections and tracks."""
+        """Build IoU similarity matrix."""
         matrix = np.zeros((len(detections), len(track_boxes)))
         for i, det_box in enumerate(detections):
             for j, track_box in enumerate(track_boxes):
@@ -61,6 +57,7 @@ class Matcher:
         return matrix
     
     def _greedy_match(self, iou_matrix: np.ndarray, track_ids: List[int]) -> Dict[int, int]:
+        """Greedy matching: iteratively match highest IoU pairs above threshold."""
         mapping: Dict[int, int] = {}
         used_dets: Set[int] = set()
         used_tracks: Set[int] = set()
@@ -85,12 +82,15 @@ class Matcher:
 
 
 class TrackManager:
+    """Manages track lifecycle: creation, updates, and removal."""
+    
     def __init__(self, max_lost: int, use_prediction: bool):
         self.max_lost = max_lost
         self.use_prediction = use_prediction
         self._next_id = 1
     
     def create_track(self, box: BBox, cls: int, score: float) -> Track:
+        """Create new track for unmatched detection."""
         cx, cy = int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2)
         track = Track(
             id=self._next_id,
@@ -103,6 +103,7 @@ class TrackManager:
         return track
     
     def update_track(self, track: Track, box: BBox, cls: int, score: float):
+        """Update track with new detection."""
         track.bbox = box
         track.cls = cls
         track.score = score
@@ -113,6 +114,7 @@ class TrackManager:
         track.update_velocity()
     
     def update_lost_tracks(self, tracks: Dict[int, Track], updated_ids: Set[int]):
+        """Update unmatched tracks: increment lost counter, predict if enabled, remove if too long."""
         for track_id, track in list(tracks.items()):
             if track_id in updated_ids:
                 continue
@@ -126,10 +128,10 @@ class TrackManager:
                 del tracks[track_id]
     
     def _should_predict(self, track: Track) -> bool:
-        """Check if track should use prediction."""
         return self.use_prediction and track.lost_frames <= self.max_lost
     
     def _apply_prediction(self, track: Track):
+        """Predict position with velocity decay."""
         decay = max(0.5, 1.0 - track.lost_frames * 0.02)
         vx, vy = track.velocity
         track.velocity = (vx * decay, vy * decay)
@@ -138,12 +140,15 @@ class TrackManager:
 
 
 class Tracker:
+    """Main tracker that coordinates matching and track management."""
+    
     def __init__(self, iou_threshold: float = 0.2, max_lost: int = 45, use_prediction: bool = True):
         self.matcher = Matcher(iou_threshold)
         self.track_manager = TrackManager(max_lost, use_prediction)
         self.tracks: Dict[int, Track] = {}
     
     def update(self, detections: List[Detection]):
+        """Update tracker with new detections."""
         boxes: List[BBox] = [tuple(d[:4]) for d in detections]  # type: ignore
         classes = [int(d[4]) for d in detections]
         scores = [float(d[5]) for d in detections]

@@ -16,12 +16,10 @@ from web.api.utils.state_sync import (
     get_camera_stats as get_sync_stats
 )
 
-# Add project root to path before importing project modules
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 logger = logging.getLogger(__name__)
 
-# Constants
 API_NAME = "YOLO Detection Monitoring API"
 API_VERSION = "1.0.0"
 DEFAULT_LIMIT = 100

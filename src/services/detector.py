@@ -30,6 +30,7 @@ DEFAULT_ULTRALYTICS_WEIGHTS = Path.home() / ".ultralytics" / "weights"
 
 
 def detect_device(requested: Optional[str] = None) -> str:
+    """Detect available compute device (CUDA or CPU)."""
     if requested:
         return requested
     
@@ -40,6 +41,7 @@ def detect_device(requested: Optional[str] = None) -> str:
 
 
 class ModelPathResolver:
+    """Resolves model paths from aliases and finds existing model files."""
     def __init__(self, models_dir: Path = DEFAULT_MODEL_DIR):
         self.models_dir = models_dir.absolute()
         self.models_dir.mkdir(parents=True, exist_ok=True)
@@ -69,12 +71,13 @@ class ModelPathResolver:
 
 
 class ModelDownloader:
+    """Downloads YOLO models from URLs if available."""
+    
     def __init__(self, models_dir: Path = DEFAULT_MODEL_DIR):
         self.models_dir = models_dir.absolute()
         self.models_dir.mkdir(parents=True, exist_ok=True)
     
     def download(self, model_name: str) -> Optional[Path]:
-        """Download model if URL is available and file doesn't exist."""
         if model_name not in MODEL_URLS or download_file is None:
             return None
         
@@ -100,12 +103,13 @@ class ModelDownloader:
 
 
 class ModelOrganizer:
+    """Organizes models into central models directory."""
+    
     def __init__(self, models_dir: Path = DEFAULT_MODEL_DIR):
         self.models_dir = models_dir.absolute()
         self.models_dir.mkdir(parents=True, exist_ok=True)
     
     def ensure_in_models_dir(self, model_path: str) -> str:
-        """Ensure model is in models directory, move if needed."""
         path = Path(model_path).absolute()
         
         if self._is_in_models_dir(path):
@@ -161,6 +165,8 @@ class ModelOrganizer:
 
 
 class UltralyticsEnvironment:
+    """Context manager for setting ULTRALYTICS_HOME environment variable."""
+    
     def __init__(self, models_dir: Path):
         self.models_dir = models_dir.absolute()
         self.old_home: Optional[str] = None
@@ -178,7 +184,6 @@ class UltralyticsEnvironment:
 
 
 def _move_model_to_device(yolo_model, device: Optional[str]) -> None:
-    """Move YOLO model to specified device."""
     if not device or torch is None:
         return
     
@@ -190,6 +195,7 @@ def _move_model_to_device(yolo_model, device: Optional[str]) -> None:
 
 
 def load_model(model: str = "yolo11m", device: Optional[str] = None):
+    """Load YOLO model with path resolution, downloading, and device setup."""
     resolver = ModelPathResolver()
     downloader = ModelDownloader()
     organizer = ModelOrganizer()
@@ -221,6 +227,7 @@ def load_model(model: str = "yolo11m", device: Optional[str] = None):
 
 
 def resolve_model_path(model: str) -> str:
+    """Resolve model name/alias to file path."""
     resolver = ModelPathResolver()
     return resolver.resolve(model)
 
