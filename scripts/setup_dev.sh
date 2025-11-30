@@ -136,7 +136,12 @@ echo ""
 echo "7. Installing Python dependencies..."
 if [ -f "requirements.txt" ]; then
     print_info "Installing from requirements.txt..."
-    pip3 install --user -q -r requirements.txt
+    # If running inside a virtualenv, do not use --user (it fails inside venvs)
+    if [ -n "$VIRTUAL_ENV" ]; then
+        pip3 install -q -r requirements.txt
+    else
+        pip3 install --user -q -r requirements.txt
+    fi
     print_success "Python dependencies installed"
 else
     print_warning "requirements.txt not found"
